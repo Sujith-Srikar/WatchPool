@@ -8,11 +8,6 @@ import { redirect } from "next/navigation";
 // import { authOptions } from "@/lib/auth-options";
 
 export default async function LandingPage() {
-  const session = await getServerSession();
-
-  if(session?.user){
-    return redirect('/dashboard')
-  }
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">

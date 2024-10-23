@@ -3,10 +3,18 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export function Appbar({ showThemeSwitch = true, isSpectator = false }) {
   const session = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    // If a session exists, navigate to the dashboard
+    if (session?.data?.user) {
+      router.push("/dashboard");
+    }
+  }, [session, router]);
 
   return (
     <div className="flex justify-between px-5 py-4 md:px-10 xl:px-20">

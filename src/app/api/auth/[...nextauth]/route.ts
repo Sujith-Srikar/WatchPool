@@ -45,18 +45,27 @@ const handler = NextAuth({
       }
     },
     async session({ session, token, user }) {
+
+      console.log("Session:", session);
+      console.log("Token:", token);
+      console.log("User:", user);
+
       const dbUser = await prismaClient.user.findUnique({
         where: {
           email: session.user.email as string,
         },
       });
+      
+      console.log("DB User:", dbUser);
       if (!dbUser) {
         return session;
       }
+
       return {
         ...session,
         user: {
-          id: dbUser.id,
+          ...session.user, // Keep the existing session user info
+          id: dbUser.id, // Attach the database ID to the session
         },
       };
     },
