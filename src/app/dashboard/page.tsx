@@ -1,15 +1,9 @@
 "use client";
 import { useSession } from "next-auth/react";
-
 import StreamView from "@/app/components/StreamView";
-import useRedirect from "@/app/hooks/useRedirect";
 
 export default function Component() {
   const { data: session, status } = useSession(); // Destructure session and status
-  const redirect = useRedirect();
-
-  console.log("Session:", session); // Check what the session contains
-  console.log("Session ID:", session?.user?.id); // Log user ID if available
 
   // Handle loading state properly
   if (status === "loading") {

@@ -41,14 +41,11 @@ const handler = NextAuth({
         });
         return true;
       } catch (e) {
+        console.log(e)
         return false;
       }
     },
-    async session({ session, token, user }) {
-
-      console.log("Session:", session);
-      console.log("Token:", token);
-      console.log("User:", user);
+    async session({ session }) {
 
       const dbUser = await prismaClient.user.findUnique({
         where: {

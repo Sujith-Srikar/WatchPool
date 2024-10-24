@@ -1,24 +1,17 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-//@ts-ignore
-import {
-  ChevronUp,
-  ChevronDown,
-  ThumbsDown,
-  Play,
-  Share2,
-  Axis3DIcon,
-} from "lucide-react";
+import Image from "next/image";
+import { ChevronUp, ChevronDown, Play, Share2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Appbar } from "../components/Appbar";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import { YT_REGEX } from "@/lib/utils";
-//@ts-ignore
+//@ts-expect-error: YouTube player API does not have TypeScript types
 import YouTubePlayer from "youtube-player";
 
 interface Video {
@@ -51,43 +44,62 @@ export default function StreamView({
   const [playNextLoader, setPlayNextLoader] = useState(false);
   const videoPlayerRef = useRef<HTMLDivElement>();
 
-  async function refreshStreams() {
+  const refreshStreams = useCallback(async () => {
     const res = await fetch(`/api/streams/?creatorId=${creatorId}`, {
       credentials: "include",
     });
     const json = await res.json();
     setQueue(
-      json.streams.sort((a: any, b: any) => (a.upvotes < b.upvotes ? 1 : -1))
+      json.streams.sort((a: Video, b: Video) =>
+        a.upvotes < b.upvotes ? 1 : -1
+      )
     );
-
     setCurrentVideo((video) => {
       if (video?.id === json.activeStream?.stream?.id) {
         return video;
       }
       return json.activeStream.stream;
     });
-  }
+  }, [creatorId]); // Add `creatorId` as a dependency
+
+  // Wrap `playNext` inside `useCallback`
+  const playNext = useCallback(async () => {
+    if (queue.length > 0) {
+      try {
+        setPlayNextLoader(true);
+        const data = await fetch("/api/streams/next", {
+          method: "GET",
+        });
+        const json = await data.json();
+        setCurrentVideo(json.stream);
+        setQueue((q) => q.filter((x) => x.id !== json.stream?.id));
+      } catch (e) {
+        console.log(e)
+      }
+      setPlayNextLoader(false);
+    }
+  }, [queue]);
 
   useEffect(() => {
     refreshStreams();
-    const interval = setInterval(() => {
+    setInterval(() => {
       refreshStreams();
     }, REFRESH_INTERVAL_MS);
-  }, []);
+  }, [refreshStreams]);
 
   useEffect(() => {
     if (!videoPlayerRef.current) {
       return;
     }
-    let player = YouTubePlayer(videoPlayerRef.current);
+    const player = YouTubePlayer(videoPlayerRef.current);
 
     // 'loadVideoById' is queued until the player is ready to receive API calls.
     player.loadVideoById(currentVideo?.extractedId);
 
     // 'playVideo' is queue until the player is ready to received API calls and after 'loadVideoById' has been called.
     player.playVideo();
-    function eventHandler(event: any) {
-      if (event.data === 0) {
+    function eventHandler(data: number) {
+      if (data === 0) {
         playNext();
       }
     }
@@ -133,21 +145,6 @@ export default function StreamView({
         streamId: id,
       }),
     });
-  };
-
-  const playNext = async () => {
-    if (queue.length > 0) {
-      try {
-        setPlayNextLoader(true);
-        const data = await fetch("/api/streams/next", {
-          method: "GET",
-        });
-        const json = await data.json();
-        setCurrentVideo(json.stream);
-        setQueue((q) => q.filter((x) => x.id !== json.stream?.id));
-      } catch (e) {}
-      setPlayNextLoader(false);
-    }
   };
 
   const handleShare = () => {
@@ -199,10 +196,13 @@ export default function StreamView({
               {queue.map((video) => (
                 <Card key={video.id} className="bg-gray-900 border-gray-800">
                   <CardContent className="p-4 flex items-center space-x-4">
-                    <img
+                    <Image
                       src={video.smallImg}
                       alt={`Thumbnail for ${video.title}`}
-                      className="w-30 h-20 object-cover rounded"
+                      height={80}
+                      width={128}
+                      objectFit="cover"
+                      className="rounded w-32 h-20"
                     />
                     <div className="flex-grow">
                       <h3 className="font-semibold text-white">
@@ -280,15 +280,18 @@ export default function StreamView({
                       <div>
                         {playVideo ? (
                           <>
-                            {/* @ts-ignore */}
+                            {/* @ts-expect-error: YouTube player API does not have TypeScript types */}
                             <div ref={videoPlayerRef} className="w-full" />
                             {/* <iframe width={"100%"} height={300} src={`https://www.youtube.com/embed/${currentVideo.extractedId}?autoplay=1`} allow="autoplay"></iframe> */}
                           </>
                         ) : (
                           <>
-                            <img
+                            <Image
                               src={currentVideo.bigImg}
-                              className="w-full h-72 object-cover rounded"
+                              alt={`Thumbnail for ${currentVideo.title}`}
+                              layout="fill"
+                              objectFit="cover"
+                              className="rounded"
                             />
                             <p className="mt-2 text-center font-semibold text-white">
                               {currentVideo.title}

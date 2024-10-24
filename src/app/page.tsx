@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-//@ts-ignore
 import { Users, Radio, Headphones } from "lucide-react";
 import { Appbar } from "@/app/components/Appbar";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 // import { authOptions } from "@/lib/auth-options";
 
 export default async function LandingPage() {

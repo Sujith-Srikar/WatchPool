@@ -12,5 +12,5 @@ export default function useRedirect() {
     } else {
       router.push("/");
     }
-  }, [session]);
+  }, [session, router]);
 }
