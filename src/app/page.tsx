@@ -1,7 +1,9 @@
+"use client"
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Users, Radio, Headphones } from "lucide-react";
 import { Appbar } from "@/app/components/Appbar";
+import { signIn } from "next-auth/react";
 // import { authOptions } from "@/lib/auth-options";
 
 export default async function LandingPage() {
@@ -22,15 +24,11 @@ export default async function LandingPage() {
               </p>
             </div>
             <div className="space-x-4">
-              <Button className="bg-purple-600 text-white hover:bg-purple-700">
-                <Link
-                  href={{
-                    pathname: "/auth",
-                    query: { authType: "signUp" },
-                  }}
-                >
-                  Get Started
-                </Link>
+              <Button
+                className="bg-purple-600 text-white hover:bg-purple-700"
+                onClick={() => signIn()}
+              >
+                Get Started
               </Button>
               <Button className="bg-white text-purple-400 hover:bg-white/90">
                 Learn More
@@ -85,21 +83,13 @@ export default async function LandingPage() {
                   ref={mailRef}
                   type="email"
                 /> */}
-              <Link
-                href={{
-                  pathname: "/auth",
-                  query: {
-                    authType: "signUp",
-                  },
-                }}
+              <Button
+                type="submit"
+                className="bg-purple-600 text-white hover:bg-purple-700"
+                onClick={() => signIn()}
               >
-                <Button
-                  type="submit"
-                  className="bg-purple-600 text-white hover:bg-purple-700"
-                >
-                  Sign Up
-                </Button>
-              </Link>
+                Sign Up
+              </Button>
               {/* </form> */}
             </div>
           </div>
