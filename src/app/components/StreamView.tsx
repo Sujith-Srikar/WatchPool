@@ -65,6 +65,7 @@ export default function StreamView({
   // Wrap `playNext` inside `useCallback`
   const playNext = useCallback(async () => {
     if (queue.length > 0) {
+      console.log("PlayNext Entered")
       try {
         setPlayNextLoader(true);
         const data = await fetch("/api/streams/next", {
@@ -100,6 +101,7 @@ export default function StreamView({
     player.playVideo();
     function eventHandler(data: number) {
       if (data === 0) {
+        console.log(data)
         playNext();
       }
     }
@@ -112,8 +114,12 @@ export default function StreamView({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    console.log("Add to queue")
     const res = await fetch("/api/streams/", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json", // <-- Crucial fix
+      },
       body: JSON.stringify({
         creatorId,
         url: inputLink,

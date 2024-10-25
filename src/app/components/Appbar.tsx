@@ -25,7 +25,7 @@ export function Appbar({ showThemeSwitch = true, isSpectator = false }) {
           showThemeSwitch ? "" : "text-white"
         }`}
       >
-        Muzer
+        TuneFlow
       </div>
       <div className="flex items-center gap-x-2">
         {isSpectator}

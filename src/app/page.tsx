@@ -5,6 +5,7 @@ import { Users, Radio, Headphones } from "lucide-react";
 import { Appbar } from "@/app/components/Appbar";
 import { signIn } from "next-auth/react";
 // import { authOptions } from "@/lib/auth-options";
+import Head from "next/head";
 
 export default async function LandingPage() {
 
