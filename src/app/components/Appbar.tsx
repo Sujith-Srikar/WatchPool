@@ -2,7 +2,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useEffect } from "react";
 
 export function Appbar({ showThemeSwitch = true, isSpectator = false }) {
@@ -50,21 +49,6 @@ export function Appbar({ showThemeSwitch = true, isSpectator = false }) {
             >
               Signin
             </Button>
-            <Link
-              href={{
-                pathname: "/auth",
-                query: {
-                  authType: "signUp",
-                },
-              }}
-            >
-              <Button
-                variant={"ghost"}
-                className="text-white hover:bg-white/10"
-              >
-                Signup
-              </Button>
-            </Link>
           </div>
         )}
 
