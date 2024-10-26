@@ -55,7 +55,6 @@ export default function StreamView({
     }
 
     const json = await res.json();
-    console.log(json)
     setQueue(
       json.streams?.sort((a: Video, b: Video) =>
         a.upvotes < b.upvotes ? 1 : -1
@@ -121,11 +120,10 @@ export default function StreamView({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log("Add to queue")
     const res = await fetch("/api/streams/", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // <-- Crucial fix
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         creatorId,

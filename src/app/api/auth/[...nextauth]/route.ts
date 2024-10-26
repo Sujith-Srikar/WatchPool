@@ -52,8 +52,6 @@ const handler = NextAuth({
           email: session.user.email as string,
         },
       });
-      
-      console.log("DB User:", dbUser);
       if (!dbUser) {
         return session;
       }
@@ -61,8 +59,8 @@ const handler = NextAuth({
       return {
         ...session,
         user: {
-          ...session.user, // Keep the existing session user info
-          id: dbUser.id, // Attach the database ID to the session
+          ...session.user,
+          id: dbUser.id, 
         },
       };
     },
