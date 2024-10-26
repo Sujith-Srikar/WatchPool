@@ -13,6 +13,8 @@ import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import { YT_REGEX } from "@/lib/utils";
 //@ts-expect-error: YouTube player API does not have TypeScript types
 import YouTubePlayer from "youtube-player";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 interface Video {
   id: string;
@@ -48,9 +50,15 @@ export default function StreamView({
     const res = await fetch(`/api/streams/?creatorId=${creatorId}`, {
       credentials: "include",
     });
+
+    if (!res.ok) {
+      signIn()
+    }
+
     const json = await res.json();
+    console.log(json)
     setQueue(
-      json.streams.sort((a: Video, b: Video) =>
+      json.streams?.sort((a: Video, b: Video) =>
         a.upvotes < b.upvotes ? 1 : -1
       )
     );
@@ -154,7 +162,7 @@ export default function StreamView({
   };
 
   const handleShare = () => {
-    const shareableLink = `${window.location.hostname}/creator/${creatorId}`;
+    const shareableLink = `${window.location.origin}/creator/${creatorId}`;
     navigator.clipboard.writeText(shareableLink).then(
       () => {
         toast.success("Link copied to clipboard!", {
@@ -183,7 +191,7 @@ export default function StreamView({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[rgb(10,10,10)] text-gray-200">
+    <div className="relative flex flex-col min-h-screen pt-10  bg-[rgb(10,10,10)] text-gray-200">
       <Appbar />
       <div className="flex justify-center">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 w-screen max-w-screen-xl pt-8">
@@ -295,9 +303,11 @@ export default function StreamView({
                             <Image
                               src={currentVideo.bigImg}
                               alt={`Thumbnail for ${currentVideo.title}`}
-                              layout="fill"
+                              height={80}
+                              width={100}
+                              layout="intrinsic"
                               objectFit="cover"
-                              className="rounded"
+                              className="rounded w-full"
                             />
                             <p className="mt-2 text-center font-semibold text-white">
                               {currentVideo.title}

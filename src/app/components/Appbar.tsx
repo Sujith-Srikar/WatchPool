@@ -1,58 +1,32 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import Logo from "@/assets/Logo";
 
-export function Appbar({ showThemeSwitch = true, isSpectator = false }) {
+export function Appbar({ showThemeSwitch = true }) {
   const session = useSession();
-  const router = useRouter();
+  const isUserLoggedIn = session.data?.user;
+  const buttonTitle = isUserLoggedIn ? "Logout" : "Login";
 
-  useEffect(() => {
-    // If a session exists, navigate to the dashboard
-    if (session?.data?.user) {
-      router.push("/dashboard");
-    }
-  }, [session, router]);
+  const handleButtonClick = () => {
+    isUserLoggedIn
+      ? signOut({ callbackUrl: "/" })
+      : signIn("google", { callbackUrl: "/dashboard" });
+  };
 
   return (
-    <div className="flex justify-between px-5 py-4 md:px-10 xl:px-20">
+    <div className="fixed translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:300ms] px-5 py-4 md:px-10 xl:px-20 z-50 top-0 backdrop-blur-[12px] w-full flex justify-between lg:px-44">
       <div
-        onClick={() => {
-          router.push("/");
-        }}
-        className={`flex flex-col justify-center text-lg font-bold hover:cursor-pointer ${
+        className={`flex items-center gap-2 justify-center text-lg font-bold ${
           showThemeSwitch ? "" : "text-white"
         }`}
       >
-        TuneFlow
+        <Logo />
+        Muzer
       </div>
-      <div className="flex items-center gap-x-2">
-        {isSpectator}
-        {session.data?.user && (
-          <Button
-            className="bg-purple-600 text-white hover:bg-purple-700"
-            onClick={() =>
-              signOut({
-                callbackUrl: "/",
-              })
-            }
-          >
-            Logout
-          </Button>
-        )}
-        {!session.data?.user && (
-          <div className="space-x-3">
-            <Button
-              className="bg-purple-600 text-white hover:bg-purple-700"
-              onClick={() => signIn()}
-            >
-              Signin
-            </Button>
-          </div>
-        )}
-
+      <div className="flex items-center gap-2">
         {/* {showThemeSwitch && <ThemeSwitcher />} */}
+        <Button onClick={handleButtonClick}>{buttonTitle}</Button>
       </div>
     </div>
   );

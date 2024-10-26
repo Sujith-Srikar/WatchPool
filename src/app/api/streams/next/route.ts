@@ -21,7 +21,6 @@ export async function GET() {
       }
     );
   }
-  console.log("before first call");
 
   const mostUpvotedStream = await prismaClient.stream.findFirst({
     where: {
@@ -34,8 +33,6 @@ export async function GET() {
       },
     },
   });
-  console.log("after first call");
-  console.log(mostUpvotedStream?.id);
 
   await Promise.all([
     prismaClient.currentStream.upsert({
