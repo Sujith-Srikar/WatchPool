@@ -13,7 +13,6 @@ import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import { YT_REGEX } from "@/lib/utils";
 //@ts-expect-error: YouTube player API does not have TypeScript types
 import YouTubePlayer from "youtube-player";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 interface Video {
