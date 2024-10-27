@@ -120,15 +120,18 @@ export default function StreamView({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const body = JSON.stringify({
+      creatorId,
+      url: inputLink,
+    });
+
     const res = await fetch("/api/streams/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Content-Length": body.length.toString(), // Try adding this line
       },
-      body: JSON.stringify({
-        creatorId,
-        url: inputLink,
-      }),
+      body: body,
     });
     setQueue([...queue, await res.json()]);
     setLoading(false);
