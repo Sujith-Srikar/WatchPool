@@ -22,7 +22,7 @@ export function Appbar() {
         className="flex items-center gap-2 justify-center text-lg font-bold"
       >
         <Logo />
-        TuneFlow
+        WatchPool
       </div>
       <div className="flex items-center gap-2">
         <Button onClick={handleButtonClick}>{buttonTitle}</Button>
