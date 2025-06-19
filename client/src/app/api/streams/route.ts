@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
     const extractedId = data.url.split("?v=")[1];
 
     const res = await youtubesearchapi.GetVideoDetails(extractedId);
+    console.log("YouTube API response:", JSON.stringify(res, null, 2));
 
     const thumbnails = res.thumbnail.thumbnails;
     thumbnails.sort((a: { width: number }, b: { width: number }) =>

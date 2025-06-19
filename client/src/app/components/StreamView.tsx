@@ -131,7 +131,6 @@ export default function StreamView({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Remove the Content-Length header - fetch API will set it automatically
         },
         body: body,
       });
