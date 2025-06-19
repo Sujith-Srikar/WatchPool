@@ -14,7 +14,6 @@ import { YT_REGEX } from "@/lib/utils";
 //@ts-expect-error: YouTube player API does not have TypeScript types
 import YouTubePlayer from "youtube-player";
 import { signIn } from "next-auth/react";
-import { useSocket } from "@/context/SocketProvider";
 
 interface Video {
   id: string;
@@ -39,7 +38,6 @@ export default function StreamView({
   creatorId: string;
   playVideo: boolean;
 }) {
-  const socket = useSocket();
   const [inputLink, setInputLink] = useState("");
   const [queue, setQueue] = useState<Video[]>([]);
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
