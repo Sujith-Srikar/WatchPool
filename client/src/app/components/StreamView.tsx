@@ -140,8 +140,6 @@ export default function StreamView({
         throw new Error(`Error adding video: ${res.status}`);
       }
 
-      const newVideo = await res.json();
-
       // Refresh the queue entirely to ensure consistency
       await refreshStreams();
 
