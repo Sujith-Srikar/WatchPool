@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 import AnimationContainer from "@/components/globals/animation-container";
 import Image from "next/image";
 

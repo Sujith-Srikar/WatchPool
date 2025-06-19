@@ -1,8 +1,6 @@
 import { prismaClient } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-//@ts-expect-error: YouTube search API does not have TypeScript types
-import youtubesearchapi from "youtube-search-api";
 import axios from "axios";
 import { YT_REGEX } from "@/lib/utils";
 import { getServerSession } from "next-auth";
@@ -30,17 +28,10 @@ export async function POST(req: NextRequest) {
     }
 
     const extractedId = data.url.split("?v=")[1];
-
-    // const res = await youtubesearchapi.GetVideoDetails(extractedId);
     const res = await axios.get(
       `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${extractedId}&format=json`
     );
     console.log("YouTube API response:", JSON.stringify(res.data, null, 2));
-
-    // const thumbnails = res.thumbnail.thumbnails;
-    // thumbnails.sort((a: { width: number }, b: { width: number }) =>
-    //   a.width < b.width ? -1 : 1
-    // );
 
     const existingActiveStream = await prismaClient.stream.count({
       where: {

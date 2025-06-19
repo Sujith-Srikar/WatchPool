@@ -4,19 +4,18 @@ import Link from "next/link";
 import AnimationContainer from "@/components/globals/animation-container";
 import Wrapper from "@/components/globals/wrapper";
 import { Button } from "@/components/ui/button";
-import SectionBadge from "@/components/ui/section-badge";
 
 const HIGHLIGHTS = [
   {
-    icon: "/icons/shield.svg",
+    icon: "/perk-one.svg",
     label: "Audience-Driven Content",
   },
   {
-    icon: "/icons/magicpen.svg",
+    icon: "/perk-three.svg",
     label: "Real-Time Voting System",
   },
   {
-    icon: "/icons/clock.svg",
+    icon: "/freecost.svg",
     label: "100% Free to Use",
   },
 ];
@@ -40,10 +39,6 @@ const CTA = () => {
         </AnimationContainer>
 
         <div className="z-30 flex flex-col justify-center items-center w-full">
-          {/* <AnimationContainer animation="fadeUp" delay={0.3}>
-            <SectionBadge title="Join Us" />
-          </AnimationContainer> */}
-
           <AnimationContainer animation="fadeUp" delay={0.4}>
             <h2 className="bg-clip-text bg-gradient-to-b from-white to-neutral-400 font-medium text-transparent text-3xl md:text-5xl lg:text-6xl">
               Let Your Audience <br /> Direct The Show{" "}
@@ -54,8 +49,8 @@ const CTA = () => {
           <AnimationContainer animation="fadeUp" delay={0.5}>
             <p className="mx-auto mt-4 max-w-lg text-muted-foreground text-sm md:text-base lg:text-lg">
               Your viewers have opinions. So many opinions. Channel that energy
-              into something useful and let them vote on what plays next. It's
-              democracy, but for your content queue.
+              into something useful and let them vote on what plays next.
+              It&apos;s democracy, but for your content queue.
             </p>
           </AnimationContainer>
 

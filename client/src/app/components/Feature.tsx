@@ -10,7 +10,7 @@ const FeaturesSection = () => {
       <div className="flex flex-col items-center gap-4 text-center">
         <AnimationContainer animation="fadeUp" delay={0.3}>
           <h2 className="bg-clip-text bg-gradient-to-b from-[#ffffff] to-neutral-400 font-medium text-transparent text-2xl md:text-4xl lg:text-5xl !leading-tight">
-            Because Your Friend's
+            Because Your Friend&apos;s
             <br />
             Taste in Videos is
             <span className="ml-2 font-subheading italic">Questionable?!</span>
