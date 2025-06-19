@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
         userId: data.creatorId,
       },
     });
-
     if (existingActiveStream > MAX_QUEUE_LEN) {
       return NextResponse.json(
         {
@@ -81,7 +80,7 @@ export async function POST(req: NextRequest) {
     console.log(e);
     return NextResponse.json(
       {
-        message: "Error while adding a stream",
+        message: `Error while adding a stream, ${e}`,
       },
       {
         status: 411,
