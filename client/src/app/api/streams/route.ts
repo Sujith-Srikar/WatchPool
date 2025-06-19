@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 //@ts-expect-error: YouTube search API does not have TypeScript types
 import youtubesearchapi from "youtube-search-api";
+import axios from "axios";
 import { YT_REGEX } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 
@@ -30,13 +31,16 @@ export async function POST(req: NextRequest) {
 
     const extractedId = data.url.split("?v=")[1];
 
-    const res = await youtubesearchapi.GetVideoDetails(extractedId);
-    console.log("YouTube API response:", JSON.stringify(res, null, 2));
-
-    const thumbnails = res.thumbnail.thumbnails;
-    thumbnails.sort((a: { width: number }, b: { width: number }) =>
-      a.width < b.width ? -1 : 1
+    // const res = await youtubesearchapi.GetVideoDetails(extractedId);
+    const res = await axios.get(
+      `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${extractedId}&format=json`
     );
+    console.log("YouTube API response:", JSON.stringify(res.data, null, 2));
+
+    // const thumbnails = res.thumbnail.thumbnails;
+    // thumbnails.sort((a: { width: number }, b: { width: number }) =>
+    //   a.width < b.width ? -1 : 1
+    // );
 
     const existingActiveStream = await prismaClient.stream.count({
       where: {
@@ -60,15 +64,9 @@ export async function POST(req: NextRequest) {
         url: data.url,
         extractedId,
         type: "Youtube",
-        title: res.title ?? "Cant find video",
-        smallImg:
-          (thumbnails.length > 1
-            ? thumbnails[thumbnails.length - 2].url
-            : thumbnails[thumbnails.length - 1].url) ??
-          "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg",
-        bigImg:
-          thumbnails[thumbnails.length - 1].url ??
-          "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg",
+        title: res.data.title ?? "Cant find video",
+        smallImg: `https://img.youtube.com/vi/${extractedId}/mqdefault.jpg`,
+        bigImg: `https://img.youtube.com/vi/${extractedId}/maxresdefault.jpg`,
       },
     });
 
