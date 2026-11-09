@@ -66,12 +66,10 @@ export default function StreamView({
       }
       return json.activeStream.stream;
     });
-  }, [creatorId]); // Add `creatorId` as a dependency
+  }, [creatorId]); 
 
-  // Wrap `playNext` inside `useCallback`
   const playNext = useCallback(async () => {
     if (queue.length > 0) {
-      console.log("PlayNext Entered");
       try {
         setPlayNextLoader(true);
         const data = await fetch("/api/streams/next", {
